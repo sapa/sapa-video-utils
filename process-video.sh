@@ -120,7 +120,8 @@ for SEARCH_PATH in "${SEARCH_PATHS[@]}"; do
 		ASPECT_RATIO=${ASPECT_RATIO:27} # cut the begining of the line
 		ASPECT_RATIO=${ASPECT_RATIO/:/\/} # replace ':' with '/' for calculation
 		ASPECT_RATIO=$(echo "scale=8; $ASPECT_RATIO" | bc)
-		WIDTH=$(LC_NUMERIC="en_US.UTF-8" printf "%.0f" $(echo "scale=8; $HEIGHT*$ASPECT_RATIO" | bc))
+		WIDTH_FLOAT=$(echo "scale=8; $HEIGHT*$ASPECT_RATIO" | bc)
+		WIDTH=$(echo "scale=0; ($WIDTH_FLOAT+0.5)/1" | bc)
 		log_local "target size:   $HEIGHT x $WIDTH"
 
 		# deinterlace?
