@@ -68,7 +68,9 @@ while [[ $# > 0 ]]; do
 done
 
 # confirm selectec options
-echo "Options selected: ${OPTIONS[@]}"
+if [ ${#OPTIONS[@]} -gt 0 ]; then
+	echo "Options selected: ${OPTIONS[@]}"
+fi
 
 # define directory for log files and make sure it exists
 LOG_DIR="$HOME/video-logs"
