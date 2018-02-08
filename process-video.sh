@@ -102,6 +102,9 @@ for SEARCH_PATH in "${SEARCH_PATHS[@]}"; do
 	# find all Matroska and QuickTime files
 	find "$SEARCH_PATH" -name "*.mkv" -o -name "*.mov" -type f | while read VIDEO_PATH; do 
 
+		# escape spaces
+		# VIDEO_PATH=$(echo $VIDEO_PATH|sed 's/\ /\\ /g')
+
 		# processing of single video file starts here
 		log_local "-- $VIDEO_PATH --"
 
@@ -115,7 +118,7 @@ for SEARCH_PATH in "${SEARCH_PATHS[@]}"; do
 		ASPECT_RATIO=${ASPECT_RATIO:19} # cut the begining of the line
 		ASPECT_RATIO=${ASPECT_RATIO/:/\/} # replace ':' with '/' for calculation
 		ASPECT_RATIO=$(echo "scale=8; $ASPECT_RATIO" | bc)
-		WIDTH=$(printf "%.0f" $(echo "scale=8; $HEIGHT*$ASPECT_RATIO" | bc))
+		WIDTH=$(LC_NUMERIC="en_US.UTF-8" printf "%.0f" $(echo "scale=8; $HEIGHT*$ASPECT_RATIO" | bc))
 		log_local "target size:   $HEIGHT x $WIDTH"
 
 		# deinterlace?
