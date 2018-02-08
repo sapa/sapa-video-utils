@@ -116,8 +116,8 @@ for SEARCH_PATH in "${SEARCH_PATHS[@]}"; do
 		log_local "original size: $HEIGHT x $WIDTH"
 
 		# extract aspect ratio and calculate width for square pixel usage copy
-		ASPECT_RATIO=$(mediainfo "$VIDEO_PATH" | grep 'Display aspect ratio' | tr -d ' ')
-		ASPECT_RATIO=${ASPECT_RATIO:19} # cut the begining of the line
+		ASPECT_RATIO=$(mediainfo "$VIDEO_PATH" | grep 'Original display aspect ratio' | tr -d ' ')
+		ASPECT_RATIO=${ASPECT_RATIO:27} # cut the begining of the line
 		ASPECT_RATIO=${ASPECT_RATIO/:/\/} # replace ':' with '/' for calculation
 		ASPECT_RATIO=$(echo "scale=8; $ASPECT_RATIO" | bc)
 		WIDTH=$(LC_NUMERIC="en_US.UTF-8" printf "%.0f" $(echo "scale=8; $HEIGHT*$ASPECT_RATIO" | bc))
