@@ -5,6 +5,8 @@ source ./common.sh
 # Converts one or many videos to a dissemination format.
 # Optionally (and for single files only) videos can also be trimmed by providing in- 
 # and out-points as parameters.
+# Source videos are expected have filenames ending with 'DIG-SKD.mkv'.
+# Target videos with be replace 'DIG-SKD' with 'NK' and use a container as defined in the settings.
 
 # Usage:
 # dip.sh PATH/TO/VIDEO/OR/DIRECTORY
@@ -80,7 +82,7 @@ fi
 
 convert() {
     SOURCE="$1"
-    TARGET="${SOURCE%.*}_h265.$CONTAINER"
+    TARGET=$(echo "$SOURCE" | gsed -r "s/DIG-SKD.mkv/NK.$CONTAINER/g")
 
     # find height and width of source file
     HEIGHT=$(mediainfo "$SOURCE" | grep Height | tr -dc '0-9')
@@ -158,9 +160,7 @@ convert() {
                 fi
             fi
         fi
-
     fi
-
 
     # TODO: optimize - https://trac.ffmpeg.org/wiki/Encode/H.265
     # ffmpeg -y -loglevel error -i "$SOURCE" -c:v "$VIDEO_CODEC" -threads "$THREADS" \
@@ -171,7 +171,7 @@ convert() {
 for SEARCH_PATH in "${SEARCH_PATHS[@]}"; do
     # find all Matroska files
     # TODO: Make sure that these are AIPs.
-    find "$SEARCH_PATH" -name "*.mkv" -type f | while read VIDEO_PATH; do 
+    find "$SEARCH_PATH" -name "*DIG-SKD.mkv" -type f | while read VIDEO_PATH; do 
         convert "$VIDEO_PATH";
     done
 done

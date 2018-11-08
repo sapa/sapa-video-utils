@@ -5,6 +5,8 @@ source ./common.sh
 # Converts one or many videos to an archival format for long-term preservation.
 # Optionally (and for single files only) videos can also be trimmed by providing in- 
 # and out-points as parameters.
+# Source videos are expected have filenames containing 'DIG-MAS' and ending with either mkv, mov or mp4.
+# Target videos with be replace 'DIG-MAS' with 'DIG-SKD' and be MKVs.
 
 # Usage:
 # aip.sh PATH/TO/VIDEO/OR/DIRECTORY
@@ -71,8 +73,7 @@ fi
 
 convert() {
     SOURCE="$1"
-    # TODO: what to do if the source video is already an mkv?
-    TARGET="${SOURCE%.*}_.mkv"
+    TARGET=$(echo "$SOURCE" | gsed -r 's/DIG-MAS.\w*/DIG-SKD.mkv/g')
     # check state of target file
     if [ -f "$TARGET" ]; then
         if [ $(stat -f "%c" "$TARGET") -lt $(stat -f "%c" "$SOURCE") ]; then
@@ -111,7 +112,7 @@ convert() {
 # loop through all given paths
 for SEARCH_PATH in "${SEARCH_PATHS[@]}"; do
     # find all Matroska and QuickTime files
-    find "$SEARCH_PATH" -name "*.mkv" -o -name "*.mov" -o -name "*.mp4" -type f | while read VIDEO_PATH; do
+    find "$SEARCH_PATH" -name "*-DIG-MAS.mkv" -o -name "*-DIG-MAS.mov" -o -name "*-DIG-MAS.mp4" -type f | while read VIDEO_PATH; do
         convert "$VIDEO_PATH";
     done
 done
