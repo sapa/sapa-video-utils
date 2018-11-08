@@ -39,10 +39,6 @@ case $key in
 esac
 done
 
-# echo "SIGNATURE: $SIGNATURE"
-# echo "HEIGHT: $HEIGHT"
-# echo "WIDTH: $WIDTH"
-
 # validate params
 if [ -z "$SIGNATURE" ] || [ -z "$HEIGHT" ] || [ -z "$WIDTH" ]; then
 	echo "Missing parameters. Usage: make-title.sh --signature ABC123 --width 1920 --height 1080"
@@ -51,25 +47,39 @@ fi
 
 # calculate text size and positions
 VIDEO_SIZE=${WIDTH}x${HEIGHT}
-REF_HEIGHT=1080
-SCALE=$(echo "scale=6; $HEIGHT/$REF_HEIGHT" | bc)
-MARGIN_LEFT_RIGHT=$(echo "$SCALE*192/1" | bc)
-MARGIN_TOP_BOTTOM=$(echo "$SCALE*108/1" | bc)
 
-SAPA_LOGO_HEIGHT=$(echo "$SCALE*218/1" | bc)
+ASPECT_RATIO=$(echo "10*$WIDTH/$HEIGHT" | bc)
+if [ $ASPECT_RATIO -gt 15 ]; then
+    # wide screen
+    REF_HEIGHT=1080
+    SCALE=$(echo "scale=6; $HEIGHT/$REF_HEIGHT" | bc)
+    MARGIN_LEFT_RIGHT=$(echo "$SCALE*192/1" | bc)
+    MARGIN_TOP_BOTTOM=$(echo "$SCALE*108/1" | bc)
+    SAPA_LOGO_HEIGHT=$(echo "$SCALE*218/1" | bc)
+    MEMORIAV_LOGO_HEIGHT=$(echo "$SCALE*210/1" | bc)
+    TEXT_SIZE=$(echo "$SCALE*38/1" | bc)
+    SIGNATURE_POSITION="$((MARGIN_LEFT_RIGHT)),$(echo "$SCALE*276/1" | bc)"
+    DONTCOPY_POSITION_1="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*438/1" | bc)"
+    DONTCOPY_POSITION_2="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*487/1" | bc)"
+    DONTCOPY_POSITION_3="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*536/1" | bc)"
+    DONTCOPY_POSITION_4="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*585/1" | bc)"
+else
+    REF_HEIGHT=576    
+    SCALE=$(echo "scale=6; $HEIGHT/$REF_HEIGHT" | bc)
+    MARGIN_LEFT_RIGHT=$(echo "$SCALE*78/1" | bc)
+    MARGIN_TOP_BOTTOM=$(echo "$SCALE*58/1" | bc)
+    SAPA_LOGO_HEIGHT=$(echo "$SCALE*86/1" | bc)
+    MEMORIAV_LOGO_HEIGHT=$(echo "$SCALE*88/1" | bc)
+    TEXT_SIZE=$(echo "$SCALE*17/1" | bc)
+    SIGNATURE_POSITION="$((MARGIN_LEFT_RIGHT)),$(echo "$SCALE*128/1" | bc)"
+    DONTCOPY_POSITION_1="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*240/1" | bc)"
+    DONTCOPY_POSITION_2="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*265/1" | bc)"
+    DONTCOPY_POSITION_3="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*290/1" | bc)"
+    DONTCOPY_POSITION_4="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*315/1" | bc)"
+fi
+
 SAPA_LOGO_SIZE_POSITION="$((10*SAPA_LOGO_HEIGHT))x$SAPA_LOGO_HEIGHT+$MARGIN_LEFT_RIGHT+$((HEIGHT-MARGIN_TOP_BOTTOM-SAPA_LOGO_HEIGHT))"
-
-MEMORIAV_LOGO_HEIGHT=$(echo "$SCALE*210/1" | bc)
 MEMORIAV_LOGO_SIZE_POSITION="$((4*MEMORIAV_LOGO_HEIGHT))x$MEMORIAV_LOGO_HEIGHT+$MARGIN_LEFT_RIGHT+$MARGIN_TOP_BOTTOM"
-
-TEXT_SIZE=$(echo "$SCALE*38/1" | bc)
-LINE_HEIGHT=80
-
-SIGNATURE_POSITION="$((MARGIN_LEFT_RIGHT)),$(echo "$SCALE*276/1" | bc)"
-DONTCOPY_POSITION_1="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*438/1" | bc)"
-DONTCOPY_POSITION_2="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*487/1" | bc)"
-DONTCOPY_POSITION_3="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*536/1" | bc)"
-DONTCOPY_POSITION_4="$MARGIN_LEFT_RIGHT,$(echo "$SCALE*585/1" | bc)"
 
 # create title still
 TITLE_IMAGE="$(mktemp).png"
