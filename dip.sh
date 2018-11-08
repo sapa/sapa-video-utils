@@ -118,7 +118,8 @@ convert() {
 
         # create title image
         # TODO: find signature
-        TITLE_PATH=$(./make-title.sh -s ABC123456 -w "$WIDTH" -h "$HEIGHT")
+        SIGNATURE=$(basename "$TARGET" ".$CONTAINER")
+        TITLE_PATH=$(./make-title.sh -s "$SIGNATURE" -w "$WIDTH" -h "$HEIGHT")
 
         if [ ! -f "$TARGET" ] || [ ! -z "$OVERWRITE" ]; then
             if [ -f "$TARGET" ]; then
