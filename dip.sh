@@ -154,6 +154,8 @@ convert() {
                 -c:v "$VIDEO_CODEC" -b:v 6000k -c:a aac -b:a 256k -y "$TARGET"
             rm "$TITLE_VIDEO"
             rm "$CONTENT_VIDEO"
+            # TODO: find custom TC
+            ./still.sh -tc 00:05 "$TARGET"
             if [ -f "$TARGET" ]; then
                 USAGECOPY_STATE="x"
                 if [ ! -z "$AUTOOPEN" ]; then
@@ -170,8 +172,7 @@ convert() {
 
 # loop through all given paths
 for SEARCH_PATH in "${SEARCH_PATHS[@]}"; do
-    # find all Matroska files
-    # TODO: Make sure that these are AIPs.
+    # find all Matroska AIP files
     find "$SEARCH_PATH" -name "*DIG-SKD.mkv" -type f | while read VIDEO_PATH; do 
         convert "$VIDEO_PATH";
     done
