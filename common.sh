@@ -24,10 +24,6 @@ if [ -z $(command -v convert) ]; then
     echo "imagemagick is required to run this script."
     exit
 fi
-if [ -z $(command -v gsed) ]; then
-    echo "gsed is required to run this script."
-    exit
-fi
 # create directory for log files if it doesn't exist yet
 if [ ! -d "$LOG_DIR" ]; then
     mkdir -p "$LOG_DIR"

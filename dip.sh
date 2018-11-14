@@ -82,7 +82,7 @@ fi
 
 convert() {
     SOURCE="$1"
-    TARGET=$(echo "$SOURCE" | gsed -r "s/DIG-SKD.mkv/NK.$CONTAINER/g")
+    TARGET=$(echo "$SOURCE" | sed -Ee "s/DIG-SKD.mkv/NK.$CONTAINER/g")
 
     # find height and width of source file
     HEIGHT=$(mediainfo "$SOURCE" | grep Height | tr -dc '0-9')

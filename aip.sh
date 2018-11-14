@@ -73,7 +73,7 @@ fi
 
 convert() {
     SOURCE="$1"
-    TARGET=$(echo "$SOURCE" | gsed -r 's/DIG-MAS.\w*/DIG-SKD.mkv/g')
+    TARGET=$(echo "$SOURCE" | sed -Ee 's/DIG-MAS.[a-z0-9]+/DIG-SKD.mkv/g')
     # check state of target file
     if [ -f "$TARGET" ]; then
         if [ $(stat -f "%c" "$TARGET") -lt $(stat -f "%c" "$SOURCE") ]; then
