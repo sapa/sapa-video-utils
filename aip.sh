@@ -75,6 +75,7 @@ fi
 convert() {
     SOURCE="$1"
     TARGET=$(echo "$SOURCE" | sed -Ee 's/DIG-MAS.[a-z0-9]+/DIG-SKD.mkv/g')
+    echo "convert video $SOURCE ..."
     # check state of target file
     if [ -f "$TARGET" ]; then
         if [ $(stat -f "%c" "$TARGET") -lt $(stat -f "%c" "$SOURCE") ]; then
