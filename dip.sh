@@ -120,7 +120,7 @@ convert() {
         # create title image
         # TODO: find signature
         SIGNATURE=$(basename "$TARGET" ".$CONTAINER")
-        TITLE_PATH=$(./make-title.sh -s "$SIGNATURE" -w "$WIDTH" -h "$HEIGHT")
+        TITLE_PATH=$("$SCRIPTPATH/make-title.sh" -s "$SIGNATURE" -w "$WIDTH" -h "$HEIGHT")
 
         if [ ! -f "$TARGET" ] || [ ! -z "$OVERWRITE" ]; then
             if [ -f "$TARGET" ]; then
@@ -156,7 +156,7 @@ convert() {
             rm "$TITLE_VIDEO"
             rm "$CONTENT_VIDEO"
             # TODO: find custom TC
-            ./still.sh -tc 00:05 "$TARGET"
+            "$SCRIPTPATH/still.sh" -tc 00:05 "$TARGET"
             if [ -f "$TARGET" ]; then
                 USAGECOPY_STATE="x"
                 if [ ! -z "$AUTOOPEN" ]; then
