@@ -104,6 +104,8 @@ convert() {
     SCAN_TYPE=${SCAN_TYPE:8:10}
     if [ "$SCAN_TYPE" == "Interlaced" ]; then
         DEINTERLACE=YES
+    else
+        DEINTERLACE=NO
     fi
 
     if [ -f "$TARGET" ]; then
