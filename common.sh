@@ -25,7 +25,7 @@ if [ -z $(command -v convert) ]; then
     exit
 fi
 # create directory for log files if it doesn't exist yet
-if [ ! -d "$LOG_DIR" ]; then
+if [ ! -z "$LOG_DIR" ] && [ ! -d "$LOG_DIR" ]; then
     mkdir -p "$LOG_DIR"
 fi
 
@@ -33,10 +33,12 @@ log() {
     LEVEL="$1"
     MSG="$2"
 
-    LOG_FILE="$LOG_DIR/$(date +"%Y-%m-%d").txt"
-    if [ ! -f "$LOG_FILE" ]; then
-        echo "time" > "$LOG_FILE"
-    fi
+    if [ ! -z "$LOG_DIR" ]; then
+        LOG_FILE="$LOG_DIR/$(date +"%Y-%m-%d").txt"
+        if [ ! -f "$LOG_FILE" ]; then
+            echo "time" > "$LOG_FILE"
+        fi
+    fi 
 
     # TODO: check log level
     echo "LOG $LEVEL - $MSG"
