@@ -9,8 +9,8 @@
 
 SCRIPTPATH="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )"
 
-SAPA_LOGO='$SCRIPTPATH/assets/SAPA_Logo_03_EDFI.png'
-MEMORIAV_LOGO='$SCRIPTPATH/assets/Memoriav.png'
+SAPA_LOGO="$SCRIPTPATH/assets/SAPA_Logo_03_EDFI.png"
+MEMORIAV_LOGO="$SCRIPTPATH/assets/Memoriav.png"
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]
