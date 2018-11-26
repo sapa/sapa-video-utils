@@ -175,7 +175,7 @@ document() {
 # loop through all given paths
 for SEARCH_PATH in "${SEARCH_PATHS[@]}"; do
     # find all Matroska and QuickTime files
-    find "$SEARCH_PATH" -name "*-DIG-MAS.mkv" -o -name "*-DIG-MAS.mov" -o -name "*-DIG-MAS.mp4" -type f | while read VIDEO_PATH; do
+    find $(realpath "$SEARCH_PATH") -name "*-DIG-MAS.mkv" -o -name "*-DIG-MAS.mov" -o -name "*-DIG-MAS.mp4" -type f | while read VIDEO_PATH; do
         convert "$VIDEO_PATH";
     done
 done

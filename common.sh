@@ -10,6 +10,10 @@ fi
 source "$SCRIPTPATH/config.sh"
 
 # check if all required binaries are installed
+if [ -z $(command -v realpath) ]; then
+    echo "realpath is required to run this script. Run 'brew install coreutils' to install."
+    exit
+fi
 if [ -z $(command -v mediainfo) ]; then
     echo "mediainfo is required to run this script."
     exit

@@ -175,7 +175,7 @@ convert() {
 # loop through all given paths
 for SEARCH_PATH in "${SEARCH_PATHS[@]}"; do
     # find all Matroska AIP files
-    find "$SEARCH_PATH" -name "*DIG-SKD.mkv" -type f | while read VIDEO_PATH; do 
+    find $(realpath "$SEARCH_PATH") -name "*DIG-SKD.mkv" -type f | while read VIDEO_PATH; do 
         convert "$VIDEO_PATH";
     done
 done
