@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source ./common.sh
+SCRIPTPATH="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )"
+source "$SCRIPTPATH/common.sh"
 
 # Creates stills from videos.
 # The time code of the still is automatically chosen but might also be set manually.

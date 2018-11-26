@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source ./common.sh
+SCRIPTPATH="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )"
+source "$SCRIPTPATH/common.sh"
 
 # Converts one or many videos to an archival format for long-term preservation.
 # Optionally (and for single files only) videos can also be trimmed by providing in- 

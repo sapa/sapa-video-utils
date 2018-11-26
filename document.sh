@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source ./common.sh
+SCRIPTPATH="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )"
+source "$SCRIPTPATH/common.sh"
 
 # This script looks for video files and generates md5 and EBUCore xml for them in the same location.
 # Usage: document.sh PATH/TO/VIDEO/OR/DIRECTORY

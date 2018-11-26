@@ -3,11 +3,11 @@
 # default parameters
 THREADS=1
 
-if [ ! -f ./config.sh ]; then
-    cp ./config-sample.sh ./config.sh
+if [ ! -f "$SCRIPTPATH/config.sh" ]; then
+    cp "$SCRIPTPATH/config-sample.sh" "$SCRIPTPATH/config.sh"
 fi
 
-source ./config.sh
+source "$SCRIPTPATH/config.sh"
 
 # check if all required binaries are installed
 if [ -z $(command -v mediainfo) ]; then
