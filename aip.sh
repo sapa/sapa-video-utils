@@ -91,6 +91,7 @@ convert() {
         # check if target is either missing, outdated or should be overwritten anyway
         if [ "$TARGET_STATE" == 'missing' ] || [ "$TARGET_STATE" == 'outdated' ] || [ ! -z "$OVERWRITE" ]; then
             # check various options for in and out points
+            # TODO: validate that in and out points are valid
             if [ ! -z "$START" ] && [ ! -z "$END" ]; then
                 ffmpeg -y -loglevel error -i "$SOURCE" -ss "$START" -to "$END" -c:v ffv1 -level 3 -threads "$THREADS" \
                     -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET"
