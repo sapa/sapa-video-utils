@@ -103,9 +103,9 @@ convert() {
     SCAN_TYPE=$(mediainfo "$SOURCE" | grep 'Scan type' | tr -d ' :')
     SCAN_TYPE=${SCAN_TYPE:8:10}
     if [ "$SCAN_TYPE" == "Interlaced" ]; then
-        DEINTERLACE=YES
+        DEINTERLACE=',yadif'
     else
-        DEINTERLACE=NO
+        DEINTERLACE=''
     fi
 
     if [ -f "$TARGET" ]; then
@@ -142,12 +142,7 @@ convert() {
 
             # convert original video
             CONTENT_VIDEO="$(mktemp)_content.mkv"
-            if [ -z "$DEINTERLACE" ]; then
-                FILTER_OPTIONS="yadif,scale=$WIDTH:$HEIGHT"
-            else
-                FILTER_OPTIONS="scale=$WIDTH:$HEIGHT"
-            fi
-            < /dev/null ffmpeg -loglevel error -threads "$THREADS" -i "$VIDEO_PATH" -c:v ffv1 -c:a pcm_s16le -vf "$FILTER_OPTIONS,setsar=1:1" "$CONTENT_VIDEO"
+            < /dev/null ffmpeg -loglevel error -threads "$THREADS" -i "$VIDEO_PATH" -c:v ffv1 -c:a pcm_s16le -vf "scale=$WIDTH:$HEIGHT,setsar=1:1$DEINTERLACE" "$CONTENT_VIDEO"
 
             # concat title and original video
             < /dev/null ffmpeg -loglevel error -threads "$THREADS" -i "$CONTENT_VIDEO" -i "$TITLE_VIDEO" \
