@@ -73,7 +73,7 @@ if [ ${#SEARCH_PATHS[@]} -lt 1 ]; then
 fi
 
 convert() {
-    SOURCE="$1"
+    SOURCE=$(realpath "$1")
     TARGET=$(echo "$SOURCE" | sed -Ee 's/DIG-MAS.[a-z0-9]+/DIG-SKD.mkv/g')
     echo "convert video $SOURCE ..."
     # check state of target file
@@ -94,16 +94,16 @@ convert() {
             # check various options for in and out points
             # TODO: validate that in and out points are valid
             if [ ! -z "$START" ] && [ ! -z "$END" ]; then
-                ffmpeg -y -loglevel error -i "$SOURCE" -ss "$START" -to "$END" -c:v ffv1 -level 3 -threads "$THREADS" \
+                < /dev/null ffmpeg -y -loglevel error -i "$SOURCE" -ss "$START" -to "$END" -c:v ffv1 -level 3 -threads "$THREADS" \
                     -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET"
             elif [ ! -z "$START" ]; then
-                ffmpeg -y -loglevel error -ss "$START" -i "$SOURCE" -c:v ffv1 -level 3 -threads "$THREADS" \
+                < /dev/null ffmpeg -y -loglevel error -ss "$START" -i "$SOURCE" -c:v ffv1 -level 3 -threads "$THREADS" \
                     -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET"
             elif [ ! -z "$END" ]; then
-                ffmpeg -y -loglevel error -i "$SOURCE" -to "$END" -c:v ffv1 -level 3 -threads "$THREADS" \
+                < /dev/null ffmpeg -y -loglevel error -i "$SOURCE" -to "$END" -c:v ffv1 -level 3 -threads "$THREADS" \
                     -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET"
             else
-                ffmpeg -y -loglevel error -i "$SOURCE" -c:v ffv1 -level 3 -threads "$THREADS" \
+                < /dev/null ffmpeg -y -loglevel error -i "$SOURCE" -c:v ffv1 -level 3 -threads "$THREADS" \
                     -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET"
             fi
         fi
@@ -175,7 +175,7 @@ document() {
 # loop through all given paths
 for SEARCH_PATH in "${SEARCH_PATHS[@]}"; do
     # find all Matroska and QuickTime files
-    find $(realpath "$SEARCH_PATH") -name "*-DIG-MAS.mkv" -o -name "*-DIG-MAS.mov" -o -name "*-DIG-MAS.mp4" -type f | while read VIDEO_PATH; do
+    find "$SEARCH_PATH" -name "*-DIG-MAS.mkv" -o -name "*-DIG-MAS.mov" -o -name "*-DIG-MAS.mp4" -type f | while read VIDEO_PATH; do
         convert "$VIDEO_PATH";
     done
 done

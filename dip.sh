@@ -133,7 +133,7 @@ convert() {
             # create title video
             TITLE_VIDEO="$(mktemp)_title.mkv"
             # TITLE_DURATION_FADE=$(echo "$TITLE_DURATION-2" | bc)
-            ffmpeg -loglevel error -threads "$THREADS" -loop 1 -i "$TITLE_PATH" -f lavfi -i aevalsrc=0:d="$TITLE_DURATION" \
+            < /dev/null ffmpeg -loglevel error -threads "$THREADS" -loop 1 -i "$TITLE_PATH" -f lavfi -i aevalsrc=0:d="$TITLE_DURATION" \
                 -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2,trim=duration=$TITLE_DURATION,fade=in:st=1:d=1" \
                 -pix_fmt yuv420p -c:v ffv1 -c:a pcm_s16le -r 25 -t "$TITLE_DURATION" "$TITLE_VIDEO"
             rm "$TITLE_PATH"
@@ -145,13 +145,13 @@ convert() {
             else
                 FILTER_OPTIONS="scale=$WIDTH:$HEIGHT"
             fi
-            ffmpeg -loglevel error -threads "$THREADS" -i "$VIDEO_PATH" -c:v ffv1 -c:a pcm_s16le -vf "$FILTER_OPTIONS" "$CONTENT_VIDEO"
+            < /dev/null ffmpeg -loglevel error -threads "$THREADS" -i "$VIDEO_PATH" -c:v ffv1 -c:a pcm_s16le -vf "$FILTER_OPTIONS" "$CONTENT_VIDEO"
 
             # concat title and original video
             # ffmpeg -loglevel error -i "$TITLE_VIDEO" -i "$CONTENT_VIDEO" \
             #     -filter_complex "[0:v:0] [0:a:0] [1:v:0] [1:a:0] concat=n=2:v=1:a=1 [v] [a]" -map '[v]' -map '[a]' \
             #     -c:v "$VIDEO_CODEC" -b:v 6000k -c:a aac -b:a 256k -y "$TARGET"
-            ffmpeg -loglevel error -threads "$THREADS" -i "$CONTENT_VIDEO" -i "$TITLE_VIDEO" \
+            < /dev/null ffmpeg -loglevel error -threads "$THREADS" -i "$CONTENT_VIDEO" -i "$TITLE_VIDEO" \
                 -filter_complex "[0:v:0] [0:a:0] [1:v:0] [1:a:0] concat=n=2:v=1:a=1 [v] [a]" -map '[v]' -map '[a]' \
                 -c:v "$VIDEO_CODEC" -b:v 6000k -c:a aac -b:a 256k -y "$TARGET"
             rm "$TITLE_VIDEO"
