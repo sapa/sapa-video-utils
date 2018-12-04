@@ -16,6 +16,7 @@ source "$SCRIPTPATH/common.sh"
 # dip.sh -ow PATH/TO/VIDEO/OR/DIRECTORY
 # dip.sh -s 01:00 -e 03:01.2 PATH/TO/VIDEO
 # dip.sh -t 4 PATH/TO/VIDEO
+# dip.sh -m PATH/TO/VIDEO
 
 # default values
 VIDEO_CODEC="libx265"
@@ -56,6 +57,10 @@ while [[ $# > 0 ]]; do
             shift
             shift
             ;;
+        -m|--memoriav)
+            MEMORIAV=YES
+            shift # past argument
+            ;;
         *)
             SEARCH_PATHS+=("$1") # everything that is not an option is considered a search path
             shift
@@ -74,6 +79,7 @@ if [ ${#SEARCH_PATHS[@]} -lt 1 ]; then
     echo "-t/--threads               : number of cores to be used"
     echo "-s/--start                 : Trim (single) video with in-point."
     echo "-e/--end                   : Trim (single) video with out-point."
+    echo "-m/--memoriav              : Add Memoriav logo to end title."
     echo "Example: dip.sh -d -l 2 -ow -s 01:02 -e 04:12.5 -t 3 PATH/TO/VIDEO"
     exit
 fi
@@ -123,7 +129,11 @@ convert() {
         # create title image
         # TODO: find signature
         SIGNATURE=$(basename "$TARGET" ".$CONTAINER")
-        TITLE_PATH=$("$SCRIPTPATH/make-title.sh" -s "$SIGNATURE" -w "$WIDTH" -h "$HEIGHT")
+        if [ -z "$MEMORIAV" ]; then
+            TITLE_PATH=$("$SCRIPTPATH/make-title.sh" -s "$SIGNATURE" -w "$WIDTH" -h "$HEIGHT")
+        else
+            TITLE_PATH=$("$SCRIPTPATH/make-title.sh" -s "$SIGNATURE" -w "$WIDTH" -h "$HEIGHT" -m)
+        fi
 
         if [ ! -f "$TARGET" ] || [ ! -z "$OVERWRITE" ]; then
             if [ -f "$TARGET" ]; then

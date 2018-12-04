@@ -33,6 +33,10 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    -m|--MEMORIAV)
+    MEMORIAV=YES
+    shift # past argument
+    ;;
     --default)
     DEFAULT=YES
     shift # past argument
@@ -92,8 +96,10 @@ convert -size "$VIDEO_SIZE" xc:black -fill white -font ArialUnicode -pointsize "
     -draw "text $DONTCOPY_POSITION_3 'È vietata quasiasi riproduzione!'" \
     -draw "text $DONTCOPY_POSITION_4 'Any copying is prohibited!'" \
 	"$TITLE_IMAGE"
-# add logo
+# add logos
 convert "$TITLE_IMAGE" "$SAPA_LOGO" -geometry "$SAPA_LOGO_SIZE_POSITION" -composite "$TITLE_IMAGE"
-convert "$TITLE_IMAGE" "$MEMORIAV_LOGO" -geometry "$MEMORIAV_LOGO_SIZE_POSITION" -composite "$TITLE_IMAGE"
+if [ ! -z "$MEMORIAV" ]; then
+    convert "$TITLE_IMAGE" "$MEMORIAV_LOGO" -geometry "$MEMORIAV_LOGO_SIZE_POSITION" -composite "$TITLE_IMAGE"
+fi
 
 echo "$TITLE_IMAGE"
