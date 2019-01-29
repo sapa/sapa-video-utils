@@ -2,6 +2,7 @@
 
 # default parameters
 THREADS=1
+TEMPDIR='/tmp'
 
 if [ ! -f "$SCRIPTPATH/config.sh" ]; then
     cp "$SCRIPTPATH/config-sample.sh" "$SCRIPTPATH/config.sh"
