@@ -22,7 +22,7 @@ source "$SCRIPTPATH/common.sh"
 VIDEO_CODEC="libx265"
 AUDIO_CODEC="aac"
 CONTAINER="mkv"
-TITLE_DURATION=6
+TITLE_DURATION=3
 
 # parse parameters
 SEARCH_PATHS=()
