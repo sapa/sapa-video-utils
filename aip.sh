@@ -75,6 +75,7 @@ fi
 convert() {
     SOURCE=$(realpath "$1")
     TARGET=$(echo "$SOURCE" | sed -Ee 's/DIG-MAS.[a-z0-9]+/DIG-SKD.mkv/g')
+    LOGFILE="${TARGET%.*}.log"
     echo "convert video $SOURCE ..."
     # check state of target file
     if [ -f "$TARGET" ]; then
@@ -94,17 +95,17 @@ convert() {
             # check various options for in and out points
             # TODO: validate that in and out points are valid
             if [ ! -z "$START" ] && [ ! -z "$END" ]; then
-                < /dev/null ffmpeg -y -loglevel error -i "$SOURCE" -ss "$START" -to "$END" -c:v ffv1 -level 3 -threads "$THREADS" \
-                    -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET"
+                < /dev/null ffmpeg -y -loglevel info -i "$SOURCE" -ss "$START" -to "$END" -c:v ffv1 -level 3 -threads "$THREADS" \
+                    -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET" 2>&1 | tee "$LOGFILE"
             elif [ ! -z "$START" ]; then
-                < /dev/null ffmpeg -y -loglevel error -ss "$START" -i "$SOURCE" -c:v ffv1 -level 3 -threads "$THREADS" \
-                    -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET"
+                < /dev/null ffmpeg -y -loglevel info -ss "$START" -i "$SOURCE" -c:v ffv1 -level 3 -threads "$THREADS" \
+                    -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET" 2>&1 | tee "$LOGFILE"
             elif [ ! -z "$END" ]; then
-                < /dev/null ffmpeg -y -loglevel error -i "$SOURCE" -to "$END" -c:v ffv1 -level 3 -threads "$THREADS" \
-                    -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET"
+                < /dev/null ffmpeg -y -loglevel info -i "$SOURCE" -to "$END" -c:v ffv1 -level 3 -threads "$THREADS" \
+                    -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET" 2>&1 | tee "$LOGFILE"
             else
-                < /dev/null ffmpeg -y -loglevel error -i "$SOURCE" -c:v ffv1 -level 3 -threads "$THREADS" \
-                    -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET"
+                < /dev/null ffmpeg -y -loglevel info -i "$SOURCE" -c:v ffv1 -level 3 -threads "$THREADS" \
+                    -coder 1 -context 1 -g 1 -slices 24 -slicecrc 1 -c:a flac "$TARGET" 2>&1 | tee "$LOGFILE"
             fi
         fi
         # TODO: validate file and log results
